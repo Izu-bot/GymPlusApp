@@ -5,9 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.gym.model.LoginRequest
-import com.example.gym.service.AuthService
+import com.example.gym.model.login.LoginRequest
 import com.example.gym.service.RetrofitFactory
+import com.example.gym.service.auth.AuthService
+import com.example.gym.util.Event
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -15,51 +16,51 @@ import java.io.IOException
 
 class LoginScreenViewModel : ViewModel() {
     private val _emailLogin = MutableLiveData<String>()
-    val emailLoing: LiveData<String> = _emailLogin
+    val emailLogin: LiveData<String> = _emailLogin
 
     private val _senhaLogin = MutableLiveData<String>()
     val senhaLogin: LiveData<String> = _senhaLogin
 
-    private val _senhaVisivel = MutableLiveData<Boolean>()
-    val senhaVisivel: LiveData<Boolean> = _senhaVisivel
-
     private val _isLoading = MutableLiveData(false)
     val isLoading: LiveData<Boolean> = _isLoading
-
-    private val _loginSuccess = MutableLiveData<String?>()
-    val loginSuccess: LiveData<String?> = _loginSuccess
 
     private val authService: AuthService by lazy {
         RetrofitFactory().authService()
     }
 
-    // Para mostrar mensagens de erro
-    private val _errorMessage = MutableLiveData<String>()
-    val errorMessage: LiveData<String> = _errorMessage
+    private val _erroMessage =  MutableLiveData<String?>(null) // Inicia como null sem erro
+    val errorMessage: LiveData<String?> = _erroMessage
 
+    private val _navigationAndStatusEvent = MutableLiveData<Event<NavigationEvent>>() // Exemplo mais robusto
+    val navigationAndStatusEvent: LiveData<Event<NavigationEvent>> = _navigationAndStatusEvent
+
+    // LiveData para erros gerais ou de sucesso (pode manter o Event wrapper)
 
     fun onEmailChanged(novoEmail: String) {
         _emailLogin.value = novoEmail
+        if (_erroMessage.value != null) { _erroMessage.value = null }
+
     }
 
     fun onSenhaChanged(novaSenha: String) {
         _senhaLogin.value = novaSenha
+        if (_erroMessage.value != null) { _erroMessage.value = null }
     }
 
-    fun toggleSenhaVisivel() {
-        _senhaVisivel.value = _senhaVisivel.value != true
-    }
 
     fun performLogin() {
         val email = _emailLogin.value ?: ""
         val password = _senhaLogin.value ?: ""
 
         if (email.isBlank() || password.isBlank()) {
-            _errorMessage.value = "Email ou senha em branco"
+            _navigationAndStatusEvent.value = Event(NavigationEvent.ShowStatusMessage("Preencha todos os campos."))
             return
         }
 
+        // Limpa erros anteriores antes de tentar novamente
+        _erroMessage.value = null
         _isLoading.value = true
+
 
         // Lança um coroutime no escopo do viewmodel
         viewModelScope.launch {
@@ -67,35 +68,42 @@ class LoginScreenViewModel : ViewModel() {
                 val loginRequest = LoginRequest(email = email, senha = password)
                 val response = authService.login(loginRequest) // chama a função suspend
 
-                if (response.isSuccessful) {
-                    val loginReponse = response.body()
-                    if (loginReponse != null)
-                    {
-                        //sucesso
-                        val token = loginReponse.token
-                        _loginSuccess.value = token
-                        Log.i("Login Sucesso", token)
-                    } else {
-                        _errorMessage.value = "Erro de servidor"
-                    }
+                if (response.isSuccessful && response.body() != null) {
+                    val token = response.body()!!.token
+
+//                  Dispara um evento para NAVEGAR para Home (passando token opcionalmente)
+                    _navigationAndStatusEvent.value = Event(NavigationEvent.NavigateToHome(token))
+
+                    // Pode salvar o token no data storage
+
                 } else {
-                    val errorMsg = response.errorBody()?.string() ?: "Erro ${response.code()}"
-                    _errorMessage.value = "Falha ao logar: $errorMsg"
+                    if (response.code() == 401) {
+                        _erroMessage.value = "Email ou senha incorretos."
+                    } else {
+                        val errorMsg = response.errorBody()?.string() ?: "Erro ${response.code()}"
+                        Log.d("Falha no login", errorMsg)
+                        _navigationAndStatusEvent.value = Event(NavigationEvent.ShowStatusMessage("Falha no login: Parece que não foi possivel se conectar a sua conta, tente novamente mais tarde."))
+                    }
                 }
             } catch (e: HttpException) {
-                // Erro específico do Retrofit para respostas não-2xx
-                _errorMessage.value = "Erro de comunicação: ${e.message()}"
-            }
-            catch (e: IOException) {
-                // Erro de rede (sem conexão, etc.)
-                _errorMessage.value = "Erro de rede. Verifique sua conexão."
+                Log.d("Erro HTTP", "${e.message}")
+                _navigationAndStatusEvent.value = Event(NavigationEvent.ShowStatusMessage("Erro de comunicação: Não foi possivel se conectar ao servidor :("))
+            } catch (e: IOException) {
+                Log.d("Error IO", "${e.message}")
+                _navigationAndStatusEvent.value = Event(NavigationEvent.ShowStatusMessage("Erro de rede. Verifique sua conexão."))
             } catch (e: Exception) {
-                // Outros erros (parsing JSON, etc.)
-                _errorMessage.value = "Ocorreu um erro inesperado: ${e.message}"
+                Log.d("Erro HTTP", "${e.message}")
+                _navigationAndStatusEvent.value = Event(NavigationEvent.ShowStatusMessage("Erro inesperado: Parece que aconteceu um erro inesperado, tente novamente mais tarde."))
             } finally {
-                // Garante que o estado de carregamento termine
                 _isLoading.value = false
             }
         }
     }
+}
+
+// Classe selada para representar diferentes tipos de eventos de navegação/status
+// Isso torna a observação na UI mais organizada.
+sealed class NavigationEvent {
+    data class NavigateToHome(val token: String?) : NavigationEvent() // Pode incluir dados se necessario
+    data class ShowStatusMessage(val message: String) : NavigationEvent()
 }

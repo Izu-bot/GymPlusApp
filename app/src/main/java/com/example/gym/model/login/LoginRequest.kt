@@ -1,4 +1,4 @@
-package com.example.gym.model
+package com.example.gym.model.login
 
 import com.google.gson.annotations.SerializedName
 

@@ -14,6 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.gym.screens.cadastro.CadastroScreen
+import com.example.gym.screens.cadastro.CadastroScreenViewModel
 import com.example.gym.screens.home.HomeScreen
 import com.example.gym.screens.login.LoginScreen
 import com.example.gym.screens.login.LoginScreenViewModel
@@ -42,7 +43,11 @@ class MainActivity : ComponentActivity() {
                             HomeScreen()
                         }
                         composable(route = "cadastro") {
-                            CadastroScreen()
+                            CadastroScreen(
+                                modifier = Modifier.padding(innerPadding),
+                                CadastroScreenViewModel(),
+                                navController
+                            )
                         }
                     }
                 }
@@ -61,7 +66,7 @@ fun GreetingPreview() {
             val navController = rememberNavController()
             NavHost(
                 navController = navController,
-                startDestination = "login"
+                startDestination = "cadastro"
             ) {
                 composable(route = "login") {
                     LoginScreen(
@@ -74,7 +79,11 @@ fun GreetingPreview() {
                     HomeScreen()
                 }
                 composable(route = "cadastro") {
-                    CadastroScreen()
+                    CadastroScreen(
+                        modifier = Modifier.padding(innerPadding),
+                        CadastroScreenViewModel(),
+                        navController
+                    )
                 }
             }
         }
