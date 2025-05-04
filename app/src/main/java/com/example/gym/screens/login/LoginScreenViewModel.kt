@@ -8,13 +8,17 @@ import androidx.lifecycle.viewModelScope
 import com.example.gym.model.login.LoginRequest
 import com.example.gym.service.RetrofitFactory
 import com.example.gym.service.auth.AuthService
-import com.example.gym.util.Event
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
 
 
 class LoginScreenViewModel : ViewModel() {
+    init {
+        Log.d("LoginVM", "ViewModel Criado! HashCode: ${this.hashCode()}")
+    }
     private val _emailLogin = MutableLiveData<String>()
     val emailLogin: LiveData<String> = _emailLogin
 
@@ -31,8 +35,8 @@ class LoginScreenViewModel : ViewModel() {
     private val _erroMessage =  MutableLiveData<String?>(null) // Inicia como null sem erro
     val errorMessage: LiveData<String?> = _erroMessage
 
-    private val _navigationAndStatusEvent = MutableLiveData<Event<NavigationEvent>>() // Exemplo mais robusto
-    val navigationAndStatusEvent: LiveData<Event<NavigationEvent>> = _navigationAndStatusEvent
+    private val _navigationAndStatusEvent = MutableSharedFlow<NavigationEvent>() // Exemplo mais robusto
+    val navigationAndStatusEvent: SharedFlow<NavigationEvent> = _navigationAndStatusEvent
 
     // LiveData para erros gerais ou de sucesso (pode manter o Event wrapper)
 
@@ -53,7 +57,10 @@ class LoginScreenViewModel : ViewModel() {
         val password = _senhaLogin.value ?: ""
 
         if (email.isBlank() || password.isBlank()) {
-            _navigationAndStatusEvent.value = Event(NavigationEvent.ShowStatusMessage("Preencha todos os campos."))
+            viewModelScope.launch {
+                _navigationAndStatusEvent.emit(NavigationEvent.ShowStatusMessage("Preencha todos os campos."))
+            }
+
             return
         }
 
@@ -72,7 +79,7 @@ class LoginScreenViewModel : ViewModel() {
                     val token = response.body()!!.token
 
 //                  Dispara um evento para NAVEGAR para Home (passando token opcionalmente)
-                    _navigationAndStatusEvent.value = Event(NavigationEvent.NavigateToHome(token))
+                    _navigationAndStatusEvent.emit(NavigationEvent.NavigateToHome(token))
 
                     // Pode salvar o token no data storage
 
@@ -82,18 +89,18 @@ class LoginScreenViewModel : ViewModel() {
                     } else {
                         val errorMsg = response.errorBody()?.string() ?: "Erro ${response.code()}"
                         Log.d("Falha no login", errorMsg)
-                        _navigationAndStatusEvent.value = Event(NavigationEvent.ShowStatusMessage("Falha no login: Parece que não foi possivel se conectar a sua conta, tente novamente mais tarde."))
+                        _navigationAndStatusEvent.emit(NavigationEvent.ShowStatusMessage("Falha no login: Parece que não foi possivel se conectar a sua conta, tente novamente mais tarde."))
                     }
                 }
             } catch (e: HttpException) {
                 Log.d("Erro HTTP", "${e.message}")
-                _navigationAndStatusEvent.value = Event(NavigationEvent.ShowStatusMessage("Erro de comunicação: Não foi possivel se conectar ao servidor :("))
+                _navigationAndStatusEvent.emit(NavigationEvent.ShowStatusMessage("Erro de comunicação: Não foi possivel se conectar ao servidor :("))
             } catch (e: IOException) {
                 Log.d("Error IO", "${e.message}")
-                _navigationAndStatusEvent.value = Event(NavigationEvent.ShowStatusMessage("Erro de rede. Verifique sua conexão."))
+                _navigationAndStatusEvent.emit(NavigationEvent.ShowStatusMessage("Erro de rede. Verifique sua conexão."))
             } catch (e: Exception) {
                 Log.d("Erro HTTP", "${e.message}")
-                _navigationAndStatusEvent.value = Event(NavigationEvent.ShowStatusMessage("Erro inesperado: Parece que aconteceu um erro inesperado, tente novamente mais tarde."))
+                _navigationAndStatusEvent.emit(NavigationEvent.ShowStatusMessage("Erro inesperado: Parece que aconteceu um erro inesperado, tente novamente mais tarde."))
             } finally {
                 _isLoading.value = false
             }

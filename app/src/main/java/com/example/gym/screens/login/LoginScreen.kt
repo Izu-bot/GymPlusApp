@@ -1,6 +1,5 @@
 package com.example.gym.screens.login
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
@@ -38,6 +37,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import com.example.gym.R
 import com.example.gym.components.LabeledTextField
@@ -45,7 +47,11 @@ import com.example.gym.components.MyButton
 import kotlinx.coroutines.launch
 
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier, loginScreenViewModel: LoginScreenViewModel, navController: NavController) {
+fun LoginScreen(
+    modifier: Modifier = Modifier,
+    loginScreenViewModel: LoginScreenViewModel,
+    navController: NavController
+) {
 
     val email by loginScreenViewModel.emailLogin.observeAsState(initial = "")
     val senha by loginScreenViewModel.senhaLogin.observeAsState(initial = "")
@@ -57,25 +63,18 @@ fun LoginScreen(modifier: Modifier = Modifier, loginScreenViewModel: LoginScreen
     val focusManager = LocalFocusManager.current
 
     val isLoading by loginScreenViewModel.isLoading.observeAsState(initial = false)
+    val lifecycleOwner = LocalLifecycleOwner.current
 
-
-    // GEMINI: Observador para os eventos de Navegação e Status
-    LaunchedEffect(key1 = Unit) { // Ou use uma key que reinicie se necessário
-        loginScreenViewModel.navigationAndStatusEvent.observeForever { event ->
-            // Tenta consumir o evento
-            event.getContentIfNotHandled()?.let { navigationEvent ->
-                // Processa o tipo específico de evento
-                when (navigationEvent) {
+    LaunchedEffect(key1 = lifecycleOwner.lifecycle, key2 = snackbarHostState) {
+        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            loginScreenViewModel.navigationAndStatusEvent.collect { navigationEvent ->
+                when(navigationEvent) {
                     is NavigationEvent.NavigateToHome -> {
-                        // Lógica de navegação
-                        val token = navigationEvent.token // Pega o token se precisar
-                        Log.d("LoginScreen", "Navegando para Home. Token: $token")
                         navController.navigate("home") {
-                            popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                           popUpTo(navController.graph.startDestinationId) { inclusive = true }
                         }
                     }
                     is NavigationEvent.ShowStatusMessage -> {
-                        // Lógica para mostrar Snackbar/Toast
                         val message = navigationEvent.message
                         scope.launch {
                             snackbarHostState.showSnackbar(message)
@@ -89,14 +88,14 @@ fun LoginScreen(modifier: Modifier = Modifier, loginScreenViewModel: LoginScreen
     Scaffold(snackbarHost = { SnackbarHost(hostState = snackbarHostState) }) { paddingValues ->
         Column(
             modifier
-            .fillMaxSize()
-            .padding(paddingValues)
-            .clickable(
-                indication = null,
-                interactionSource = remember { MutableInteractionSource() }
-            ) {
-                focusManager.clearFocus()
-            },
+                .fillMaxSize()
+                .padding(paddingValues)
+                .clickable(
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() }
+                ) {
+                    focusManager.clearFocus()
+                },
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.padding(top = 110.dp))
@@ -179,7 +178,10 @@ fun LoginScreen(modifier: Modifier = Modifier, loginScreenViewModel: LoginScreen
                 ),
                 shape = RoundedCornerShape(16.dp),
                 elevation = ButtonDefaults.buttonElevation(),
-                modifier = Modifier.fillMaxWidth().padding(15.dp).size(55.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(15.dp)
+                    .size(55.dp)
             )
 
             if (isLoading) {
@@ -204,7 +206,6 @@ fun LoginScreen(modifier: Modifier = Modifier, loginScreenViewModel: LoginScreen
                         navController.navigate("cadastro")
                     })
             }
-
         }
     }
 }
