@@ -17,6 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.gym.screens.cadastro.CadastroScreen
 import com.example.gym.screens.cadastro.CadastroScreenViewModel
 import com.example.gym.screens.home.HomeScreen
+import com.example.gym.screens.home.HomeScreenViewModel
 import com.example.gym.screens.login.LoginScreen
 import com.example.gym.screens.login.LoginScreenViewModel
 import com.example.gym.ui.theme.GymTheme
@@ -41,9 +42,6 @@ class MainActivity : ComponentActivity() {
                                 navController
                             )
                         }
-                        composable(route = "home") {
-                            HomeScreen()
-                        }
                         composable(route = "cadastro") {
                             val viewModel: CadastroScreenViewModel = viewModel()
                             CadastroScreen(
@@ -52,41 +50,15 @@ class MainActivity : ComponentActivity() {
                                 navController
                             )
                         }
+                        composable(route = "home") {
+                            val viewModel: HomeScreenViewModel = viewModel()
+                            HomeScreen(
+                                modifier = Modifier.padding(innerPadding),
+                                homeScreenViewModel = viewModel,
+                                navController
+                            )
+                        }
                     }
-                }
-            }
-        }
-    }
-}
-
-
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun GreetingPreview() {
-    GymTheme {
-        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-            val navController = rememberNavController()
-            NavHost(
-                navController = navController,
-                startDestination = "cadastro"
-            ) {
-                composable(route = "login") {
-                    LoginScreen(
-                        modifier = Modifier.padding(innerPadding),
-                        LoginScreenViewModel(),
-                        navController
-                    )
-                }
-                composable(route = "home") {
-                    HomeScreen()
-                }
-                composable(route = "cadastro") {
-                    CadastroScreen(
-                        modifier = Modifier.padding(innerPadding),
-                        CadastroScreenViewModel(),
-                        navController
-                    )
                 }
             }
         }
