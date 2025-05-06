@@ -79,8 +79,8 @@ class CadastroScreenViewModel : ViewModel() {
         if (senha != confirmSenha) {
             _senhaErroMessage.value = "As senhas não conferem."
             senhasValidas = false
-        } else if (senha.length < 6) { // Exemplo: Adicionar validação de tamanho mínimo
-            _senhaErroMessage.value = "A senha deve ter pelo menos 6 caracteres."
+        } else if (senha.length < 8) { // Exemplo: Adicionar validação de tamanho mínimo
+            _senhaErroMessage.value = "A senha deve ter pelo menos 8 caracteres."
             senhasValidas = false
         }
 
