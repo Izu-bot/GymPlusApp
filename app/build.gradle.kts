@@ -51,8 +51,8 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
 
-//    Data store
-    implementation(libs.androidx.datastore.preferences)
+// DataStore
+    implementation("androidx.datastore:datastore-preferences:1.1.6")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

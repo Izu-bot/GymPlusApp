@@ -17,10 +17,6 @@ import java.io.IOException
 
 class CadastroScreenViewModel : ViewModel() {
 
-    init {
-        Log.d("CadastroVM", "ViewModel Criado! HashCode: ${this.hashCode()}")
-    }
-
     private val _emailLogin = MutableLiveData("")
     val emailLogin: LiveData<String> = _emailLogin
 
@@ -120,7 +116,6 @@ class CadastroScreenViewModel : ViewModel() {
                         _navigationAndStatusEvent.emit(NavigationEvent.NavigationToLogin(true))
                 } else {
                     if (response.code() == 400) {
-                        Log.d("CadastroViewModel", "Tentando mostrar Snackbar: Campos vazios")
                         _navigationAndStatusEvent.emit(NavigationEvent.ShowStatusMessage("Não foi possivel estabelecer conexão com o servidor"))
                     } else {
                         var errorMsg = response.errorBody()?.string() ?: "Erro ${response.code()}"
@@ -128,13 +123,10 @@ class CadastroScreenViewModel : ViewModel() {
                     }
                 }
             } catch (e: HttpException) {
-            Log.d("Erro HTTP", "${e.message}")
             _navigationAndStatusEvent.emit(NavigationEvent.ShowStatusMessage("Erro de comunicação: Não foi possivel se conectar ao servidor :("))
         } catch (e: IOException) {
-            Log.d("Error IO", "${e.message}")
             _navigationAndStatusEvent.emit(NavigationEvent.ShowStatusMessage("Erro de rede. Verifique sua conexão."))
         } catch (e: Exception) {
-            Log.d("Erro HTTP", "${e.message}")
             _navigationAndStatusEvent.emit(NavigationEvent.ShowStatusMessage("Erro inesperado: Parece que aconteceu um erro inesperado, tente novamente mais tarde."))
         } finally {
             _isLoading.value = false

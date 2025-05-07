@@ -1,24 +1,19 @@
 package com.example.gym.screens.login
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.gym.data.PreferencesManager
 import com.example.gym.model.login.LoginRequest
 import com.example.gym.service.RetrofitFactory
 import com.example.gym.service.auth.AuthService
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
-import java.io.IOException
 
+class LoginScreenViewModel() : ViewModel() {
 
-class LoginScreenViewModel : ViewModel() {
-    init {
-        Log.d("LoginVM", "ViewModel Criado! HashCode: ${this.hashCode()}")
-    }
     private val _emailLogin = MutableLiveData<String>()
     val emailLogin: LiveData<String> = _emailLogin
 
@@ -51,56 +46,46 @@ class LoginScreenViewModel : ViewModel() {
         if (_erroMessage.value != null) { _erroMessage.value = null }
     }
 
-
     fun performLogin() {
         val email = _emailLogin.value ?: ""
         val password = _senhaLogin.value ?: ""
 
         if (email.isBlank() || password.isBlank()) {
-            viewModelScope.launch {
-                _navigationAndStatusEvent.emit(NavigationEvent.ShowStatusMessage("Preencha todos os campos."))
-            }
-
+            _navigationAndStatusEvent.tryEmit(NavigationEvent.ShowStatusMessage("Preencha todos os campos."))
             return
         }
 
-        // Limpa erros anteriores antes de tentar novamente
-        _erroMessage.value = null
         _isLoading.value = true
-
-
-        // Lança um coroutime no escopo do viewmodel
         viewModelScope.launch {
             try {
                 val loginRequest = LoginRequest(email = email, senha = password)
-                val response = authService.login(loginRequest) // chama a função suspend
+                val response = authService.login(loginRequest)
 
-                if (response.isSuccessful && response.body() != null) {
-                    val token = response.body()!!.token
-
-//                  Dispara um evento para NAVEGAR para Home (passando token opcionalmente)
-                    _navigationAndStatusEvent.emit(NavigationEvent.NavigateToHome(token))
-
-                    // Pode salvar o token no data storage
-
-                } else {
-                    if (response.code() == 401) {
-                        _erroMessage.value = "Email ou senha incorretos."
-                    } else {
-                        val errorMsg = response.errorBody()?.string() ?: "Erro ${response.code()}"
-                        Log.d("Falha no login", errorMsg)
-                        _navigationAndStatusEvent.emit(NavigationEvent.ShowStatusMessage("Falha no login: Parece que não foi possivel se conectar a sua conta, tente novamente mais tarde."))
+                if (response.isSuccessful) {
+                    response.body()?.let { loginResponse ->
+                        // Bloco corrigido
+                        viewModelScope.launch {
+                            try {
+                                PreferencesManager.saveUserToken(loginResponse.token)
+                                _navigationAndStatusEvent.emit(
+                                    NavigationEvent.NavigateToHome(loginResponse.token)
+                                )
+                            } catch (e: Exception) {
+                                _navigationAndStatusEvent.emit(
+                                    NavigationEvent.ShowStatusMessage("Erro ao salvar sessão")
+                                )
+                            }
+                        }
+                    } ?: run {
+                        _navigationAndStatusEvent.emit(
+                            NavigationEvent.ShowStatusMessage("Resposta inválida do servidor")
+                        )
                     }
+                } else {
+                    // Tratar erros HTTP
                 }
-            } catch (e: HttpException) {
-                Log.d("Erro HTTP", "${e.message}")
-                _navigationAndStatusEvent.emit(NavigationEvent.ShowStatusMessage("Erro de comunicação: Não foi possivel se conectar ao servidor :("))
-            } catch (e: IOException) {
-                Log.d("Error IO", "${e.message}")
-                _navigationAndStatusEvent.emit(NavigationEvent.ShowStatusMessage("Erro de rede. Verifique sua conexão."))
             } catch (e: Exception) {
-                Log.d("Erro HTTP", "${e.message}")
-                _navigationAndStatusEvent.emit(NavigationEvent.ShowStatusMessage("Erro inesperado: Parece que aconteceu um erro inesperado, tente novamente mais tarde."))
+                // Tratar outros erros
             } finally {
                 _isLoading.value = false
             }
