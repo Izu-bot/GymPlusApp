@@ -1,4 +1,4 @@
-package com.example.gym.screens
+package com.example.gym.screens.login
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

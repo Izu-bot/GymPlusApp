@@ -6,13 +6,14 @@ import androidx.lifecycle.viewModelScope
 import com.example.gym.data.PreferencesManager
 import com.example.gym.service.RetrofitFactory
 import com.example.gym.service.user.UserService
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class HomeScreenViewModel : ViewModel() {
-
 
     private val userService: UserService by lazy {
         RetrofitFactory().cadastroUsuario()
@@ -26,6 +27,9 @@ class HomeScreenViewModel : ViewModel() {
 
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error
+
+    private val _navigationAndStatusEvent = MutableSharedFlow<NavigationEvent>()
+    val navigationAndStatusEvent: SharedFlow<NavigationEvent> = _navigationAndStatusEvent
 
     init {
         loadUserDataAutomatically()
@@ -57,7 +61,6 @@ class HomeScreenViewModel : ViewModel() {
                     response.code() == 401 -> {
                         _error.value = "Sessão expirada"
                         PreferencesManager.clearUserToken()
-                        // Adicione navegação para login aqui
                     }
                     else -> {
                         _error.value = "Erro: ${response.code()}"
@@ -89,4 +92,9 @@ class HomeScreenViewModel : ViewModel() {
             "Boa noite"
         }
     }
+}
+
+sealed class NavigationEvent {
+    data class NavigationToLogin(val statusCode: Boolean) : NavigationEvent()
+    data class ShowStatusMessage(val message: String) : NavigationEvent()
 }

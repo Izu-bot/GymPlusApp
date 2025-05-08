@@ -19,13 +19,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.gym.data.PreferencesManager
-import com.example.gym.screens.TimerScreen
+import com.example.gym.screens.login.TimerScreen
 import com.example.gym.screens.cadastro.CadastroScreen
 import com.example.gym.screens.cadastro.CadastroScreenViewModel
 import com.example.gym.screens.home.HomeScreen
 import com.example.gym.screens.home.HomeScreenViewModel
 import com.example.gym.screens.login.LoginScreen
 import com.example.gym.screens.login.LoginScreenViewModel
+import com.example.gym.service.RetrofitFactory
+import com.example.gym.service.api.ApiService
 import com.example.gym.ui.theme.GymTheme
 import kotlinx.coroutines.delay
 
@@ -39,15 +41,23 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 var startDestination by remember { mutableStateOf("loading") }
                 val tokenFlow = PreferencesManager.getUserToken()
+                val apiCheck: ApiService by lazy {
+                    RetrofitFactory().apiCheck()
+                }
                 val tokenState = tokenFlow.collectAsState(initial = null)
 
                 // Controle de navegação baseado no token
                 LaunchedEffect(tokenState.value) {
                     delay(1000)
-                    startDestination = when (tokenState.value) {
-                        null -> "login"
-                        else -> "home"
+                    startDestination = if(apiCheck.ping().isSuccessful){
+                        when (tokenState.value) {
+                            null -> "login"
+                            else -> "home"
+                        }
+                    } else {
+                        "login"
                     }
+
                 }
 
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->

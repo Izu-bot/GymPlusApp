@@ -51,7 +51,9 @@ class LoginScreenViewModel() : ViewModel() {
         val password = _senhaLogin.value ?: ""
 
         if (email.isBlank() || password.isBlank()) {
-            _navigationAndStatusEvent.tryEmit(NavigationEvent.ShowStatusMessage("Preencha todos os campos."))
+            viewModelScope.launch {
+                _navigationAndStatusEvent.emit(NavigationEvent.ShowStatusMessage("Preencha todos os campos."))
+            }
             return
         }
 
@@ -81,9 +83,12 @@ class LoginScreenViewModel() : ViewModel() {
                             NavigationEvent.ShowStatusMessage("Resposta inválida do servidor")
                         )
                     }
+                } else {
+                    _navigationAndStatusEvent.emit(
+                        NavigationEvent.ShowStatusMessage("Lamentamos mas não foi possivel se comunicar com o servidor.")
+                    )
                 }
             } catch (e: Exception) {
-                // Tratar outros erros
             } finally {
                 _isLoading.value = false
             }

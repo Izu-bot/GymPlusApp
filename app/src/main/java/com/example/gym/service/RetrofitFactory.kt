@@ -1,12 +1,13 @@
 package com.example.gym.service
 
+import com.example.gym.service.api.ApiService
 import com.example.gym.service.auth.AuthService
 import com.example.gym.service.user.UserService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class RetrofitFactory {
-    private val _url = "https://53e4-2804-dec-236-d500-40e7-c800-115e-eb6f.ngrok-free.app/"
+    private val _url = "https://0666-2804-dec-236-d500-8f24-d967-318f-4309.ngrok-free.app/"
 
     private val retrofitFactory = Retrofit
         .Builder()
@@ -20,5 +21,9 @@ class RetrofitFactory {
 
     fun cadastroUsuario() : UserService {
         return retrofitFactory.create(UserService::class.java)
+    }
+
+    fun apiCheck() : ApiService {
+        return retrofitFactory.create(ApiService::class.java)
     }
 }
