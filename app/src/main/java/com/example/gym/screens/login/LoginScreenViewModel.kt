@@ -81,8 +81,6 @@ class LoginScreenViewModel() : ViewModel() {
                             NavigationEvent.ShowStatusMessage("Resposta inválida do servidor")
                         )
                     }
-                } else {
-                    // Tratar erros HTTP
                 }
             } catch (e: Exception) {
                 // Tratar outros erros

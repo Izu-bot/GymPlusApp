@@ -16,6 +16,5 @@ fun HomeScreen(modifier: Modifier = Modifier, homeScreenViewModel: HomeScreenVie
 
     Column(modifier.fillMaxSize()) {
         Text("${homeScreenViewModel.welcomeUser()}, ${name.takeIf { it.isNotEmpty() } ?: "Usuário"}")
-
     }
 }
