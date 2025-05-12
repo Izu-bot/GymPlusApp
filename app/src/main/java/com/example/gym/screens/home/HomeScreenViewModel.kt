@@ -12,6 +12,9 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.format.TextStyle
+import java.util.Locale
 
 class HomeScreenViewModel : ViewModel() {
 
@@ -21,6 +24,9 @@ class HomeScreenViewModel : ViewModel() {
 
     private val _nameUser = MutableStateFlow("")
     val nameUser: StateFlow<String> = _nameUser
+
+    private val _getDay = MutableStateFlow("")
+    val getDay: StateFlow<String> = _getDay
 
     private val _loading = MutableStateFlow(false)
     val loading: StateFlow<Boolean> = _loading
@@ -33,6 +39,7 @@ class HomeScreenViewModel : ViewModel() {
 
     init {
         loadUserDataAutomatically()
+        getDay()
     }
 
     private fun loadUserDataAutomatically() {
@@ -70,6 +77,18 @@ class HomeScreenViewModel : ViewModel() {
                 _error.value = "Falha na conexão: ${e.localizedMessage}"
             }
         }
+    }
+
+    fun getDay() {
+        val atual = LocalDate.now()
+        val locale = Locale.getDefault()
+
+        val diaMes = atual.dayOfMonth
+        val mes = atual.month.getDisplayName(TextStyle.FULL, locale).lowercase().replaceFirstChar { it.uppercase() }
+        val diaSemana = atual.dayOfWeek.getDisplayName(TextStyle.FULL, locale).lowercase().replaceFirstChar { it.uppercase() }
+        val resultado = "$diaSemana, $diaMes de $mes"
+
+        _getDay.value = resultado
     }
 
     private fun getHora(): Pair<Int, Int> {

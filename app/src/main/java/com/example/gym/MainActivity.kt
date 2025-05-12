@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             GymTheme {
                 val navController = rememberNavController()
-                var startDestination by remember { mutableStateOf("loading") }
+                var startDestination by remember { mutableStateOf("home") }
                 val tokenFlow = PreferencesManager.getUserToken()
                 val apiCheck: ApiService by lazy {
                     RetrofitFactory().apiCheck()
@@ -47,18 +47,18 @@ class MainActivity : ComponentActivity() {
                 val tokenState = tokenFlow.collectAsState(initial = null)
 
                 // Controle de navegação baseado no token
-                LaunchedEffect(tokenState.value) {
-                    delay(1000)
-                    startDestination = if(apiCheck.ping().isSuccessful){
-                        when (tokenState.value) {
-                            null -> "login"
-                            else -> "home"
-                        }
-                    } else {
-                        "login"
-                    }
-
-                }
+//                LaunchedEffect(tokenState.value) {
+//                    delay(1000)
+//                    startDestination = if(apiCheck.ping().isSuccessful){
+//                        when (tokenState.value) {
+//                            null -> "login"
+//                            else -> "home"
+//                        }
+//                    } else {
+//                        "login"
+//                    }
+//
+//                }
 
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 

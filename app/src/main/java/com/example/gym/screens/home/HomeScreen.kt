@@ -17,6 +17,7 @@ import androidx.navigation.NavController
 fun HomeScreen(modifier: Modifier = Modifier, homeScreenViewModel: HomeScreenViewModel, navController: NavController) {
 
     val name by homeScreenViewModel.nameUser.collectAsState()
+    val dia by homeScreenViewModel.getDay.collectAsState()
 
     Column(modifier.fillMaxSize()) {
         Text(
@@ -25,6 +26,13 @@ fun HomeScreen(modifier: Modifier = Modifier, homeScreenViewModel: HomeScreenVie
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.padding(15.dp)
+        )
+        Text(
+            text = dia,
+            style = MaterialTheme.typography.bodySmall,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
+            modifier = Modifier.padding(horizontal = 15.dp)
         )
     }
 }
