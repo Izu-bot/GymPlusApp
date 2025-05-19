@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CardElevation
@@ -22,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -36,16 +38,14 @@ fun CardTraining(
     cornerRadius: Dp,
     colors: CardColors,
     cardElevation: CardElevation,
-    borderStroke: BorderStroke,
 ) {
-    OutlinedCard(
+    Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(24.dp),
         shape = RoundedCornerShape(cornerRadius),
         colors = colors,
         elevation = cardElevation,
-        border = borderStroke
     ) {
         Column(
             modifier = Modifier
@@ -64,21 +64,20 @@ fun CardTraining(
                 color = MaterialTheme.colorScheme.secondary
             )
 
-            Spacer(modifier = Modifier.height(14.dp))
+            Spacer(modifier = Modifier.height(22.dp))
 
             MyButton(
                 text = titleButton,
                 fontSize = 16.sp,
                 onClick = {},
                 buttonColors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                    containerColor = MaterialTheme.colorScheme.secondary,
                     contentColor = MaterialTheme.colorScheme.surface
                 ),
                 shape = RoundedCornerShape(10.dp),
                 elevation = ButtonDefaults.buttonElevation(),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 15.dp)
                     .size(55.dp)
             )
         }
@@ -91,13 +90,12 @@ private fun CardTrainingPreview() {
     CardTraining(
         cornerRadius = 16.dp,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
+            containerColor = MaterialTheme.colorScheme.onSecondary,
             contentColor = MaterialTheme.colorScheme.onSurface
         ),
         cardElevation = CardDefaults.cardElevation(
             defaultElevation = 6.dp
         ),
-        borderStroke = BorderStroke(1.dp, MaterialTheme.colorScheme.onSecondaryContainer),
         title = "Treino de hoje",
         subTitle = "Complete suas metas diárias",
         titleButton = "Começar treino"

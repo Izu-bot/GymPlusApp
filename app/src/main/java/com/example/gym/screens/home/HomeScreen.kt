@@ -48,15 +48,14 @@ fun HomeScreen(modifier: Modifier = Modifier, homeScreenViewModel: HomeScreenVie
         Spacer(modifier = Modifier.height(32.dp))
 
         CardTraining(
-            cornerRadius = 22.dp,
+            cornerRadius = 20.dp,
             colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surface,
+                containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                 contentColor = MaterialTheme.colorScheme.onSurface
             ),
             cardElevation = CardDefaults.cardElevation(
                 defaultElevation = 6.dp
             ),
-            borderStroke = BorderStroke(1.dp, MaterialTheme.colorScheme.onSecondaryContainer),
             title = "Treino de hoje",
             subTitle = "Complete suas metas diárias",
             titleButton = "Começar treino"

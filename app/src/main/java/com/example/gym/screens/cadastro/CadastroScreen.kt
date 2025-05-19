@@ -41,6 +41,7 @@ import androidx.navigation.NavController
 import com.example.gym.components.HeaderViewBackButton
 import com.example.gym.components.LabeledTextField
 import com.example.gym.components.MyButton
+import com.example.gym.navigation.Destination
 import kotlinx.coroutines.launch
 
 @Composable
@@ -72,7 +73,9 @@ fun CadastroScreen(
                         val sucess = navigationEvent.statusCode
                         Log.d("CadastroScreen", "Navegando para o Login. Sucesso: $sucess")
 
-                        navController.navigate("login") // Pode limpar a backstack ou passar dados por parametro
+                        navController.navigate(Destination.LOGIN.route) {
+                            popUpTo(Destination.CADASTRO.route) { inclusive = true }
+                        }
                     }
                     is NavigationEvent.ShowStatusMessage -> {
                         val message = navigationEvent.message

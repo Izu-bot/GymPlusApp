@@ -44,6 +44,7 @@ import androidx.navigation.NavController
 import com.example.gym.R
 import com.example.gym.components.LabeledTextField
 import com.example.gym.components.MyButton
+import com.example.gym.navigation.Destination
 import kotlinx.coroutines.launch
 
 @Composable
@@ -70,8 +71,8 @@ fun LoginScreen(
             loginScreenViewModel.navigationAndStatusEvent.collect { navigationEvent ->
                 when(navigationEvent) {
                     is NavigationEvent.NavigateToHome -> {
-                        navController.navigate("home") {
-                           popUpTo(navController.graph.startDestinationId) { inclusive = true }
+                        navController.navigate(Destination.HOME.route) {
+                           popUpTo(0) { inclusive = true }
                         }
                     }
                     is NavigationEvent.ShowStatusMessage -> {
