@@ -19,6 +19,10 @@ import com.example.gym.screens.home.HomeScreenViewModel
 import com.example.gym.screens.login.LoginScreen
 import com.example.gym.screens.login.LoginScreenViewModel
 import com.example.gym.screens.login.TimerScreen
+import com.example.gym.screens.medicao.MedicaoScreen
+import com.example.gym.screens.medicao.MedicaoScreenViewModel
+import com.example.gym.screens.progresso.PhotosScreen
+import com.example.gym.screens.progresso.PhotosScreenViewModel
 import com.example.gym.screens.workout.WorkoutScreen
 import com.example.gym.screens.workout.WorkoutScreenViewModel
 import com.example.gym.service.RetrofitFactory
@@ -32,7 +36,7 @@ fun AppNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Destination.LOADING.route,
+        startDestination = Destination.HOME.route,
         modifier = modifier
     ) {
         composable(Destination.LOADING.route) {
@@ -95,6 +99,22 @@ fun AppNavHost(
             WorkoutScreen(
                 modifier = Modifier.fillMaxSize(),
                 workoutScreenViewModel = viewModel,
+                navController = navController
+            )
+        }
+        composable(Destination.PHOTOS.route) {
+            val viewModel: PhotosScreenViewModel = viewModel()
+            PhotosScreen(
+                modifier = Modifier.fillMaxSize(),
+                photosScreenViewModel = viewModel,
+                navController = navController
+            )
+        }
+        composable(Destination.MEDICAO.route) {
+            val viewModel: MedicaoScreenViewModel = viewModel()
+            MedicaoScreen(
+                modifier = Modifier.fillMaxSize(),
+                medicaoScreenViewModel = viewModel,
                 navController = navController
             )
         }
