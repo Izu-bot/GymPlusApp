@@ -17,7 +17,9 @@ fun MainScreen() {
 
     val showBottomBar = currentRoute in listOf(
         Destination.HOME.route,
-        Destination.WORKOUT.route
+        Destination.WORKOUT.route,
+        Destination.PHOTOS.route,
+        Destination.MEDICAO.route
     )
 
     Scaffold(
