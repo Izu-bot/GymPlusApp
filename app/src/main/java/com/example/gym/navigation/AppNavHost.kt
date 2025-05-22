@@ -1,16 +1,17 @@
 package com.example.gym.navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusModifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navigation
 import com.example.gym.data.PreferencesManager
 import com.example.gym.screens.cadastro.CadastroScreen
 import com.example.gym.screens.cadastro.CadastroScreenViewModel
@@ -23,6 +24,7 @@ import com.example.gym.screens.medicao.MedicaoScreen
 import com.example.gym.screens.medicao.MedicaoScreenViewModel
 import com.example.gym.screens.progresso.PhotosScreen
 import com.example.gym.screens.progresso.PhotosScreenViewModel
+import com.example.gym.screens.workout.CreateWorkoutScreen
 import com.example.gym.screens.workout.WorkoutScreen
 import com.example.gym.screens.workout.WorkoutScreenViewModel
 import com.example.gym.service.RetrofitFactory
@@ -117,6 +119,18 @@ fun AppNavHost(
                 medicaoScreenViewModel = viewModel,
                 navController = navController
             )
+        }
+
+        // Navegação independente (não aparece no BottomBar)
+        navigation(
+            route = "independent", startDestination = Destination.HOME.route
+        ) {
+            composable(Destination.CREATE_WORKUT.route) {
+                CreateWorkoutScreen(
+                    modifier = Modifier.fillMaxSize(),
+                    navController = navController
+                )
+            }
         }
     }
 }

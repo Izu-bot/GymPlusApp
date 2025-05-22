@@ -21,6 +21,7 @@ import androidx.navigation.NavController
 import com.example.gym.R
 import com.example.gym.components.CardComponent
 import com.example.gym.components.CardTraining
+import com.example.gym.navigation.Destination
 
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier, homeScreenViewModel: HomeScreenViewModel, navController: NavController) {
@@ -79,6 +80,11 @@ fun HomeScreen(modifier: Modifier = Modifier, homeScreenViewModel: HomeScreenVie
                 cardElevation = CardDefaults.cardElevation(
                     defaultElevation = 6.dp
                 ),
+                onClick =  {
+                    navController.navigate(Destination.CREATE_WORKUT.route) {
+                        launchSingleTop = true
+                    }
+                }
             )
             CardComponent(
                 icon = R.drawable.trading,
@@ -93,6 +99,9 @@ fun HomeScreen(modifier: Modifier = Modifier, homeScreenViewModel: HomeScreenVie
                 cardElevation = CardDefaults.cardElevation(
                     defaultElevation = 6.dp
                 ),
+                onClick = {
+
+                }
             )
         }
     }

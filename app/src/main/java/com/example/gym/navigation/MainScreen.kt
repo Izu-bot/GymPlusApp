@@ -19,7 +19,7 @@ fun MainScreen() {
         Destination.HOME.route,
         Destination.WORKOUT.route,
         Destination.PHOTOS.route,
-        Destination.MEDICAO.route
+        Destination.MEDICAO.route,
     )
 
     Scaffold(

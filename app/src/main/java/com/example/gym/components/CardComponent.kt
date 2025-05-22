@@ -31,13 +31,15 @@ fun CardComponent(
     textColor: Color,
     cornerRadius: Dp,
     colors: CardColors,
-    cardElevation: CardElevation
+    cardElevation: CardElevation,
+    onClick: () -> Unit
 ) {
     Card(
         shape = RoundedCornerShape(cornerRadius),
         colors = colors,
         elevation = cardElevation,
-        modifier = Modifier.size(width = 160.dp, height = 84.dp)
+        modifier = Modifier.size(width = 160.dp, height = 84.dp),
+        onClick = onClick
     ) {
         Column(
             modifier = Modifier.padding(10.dp)

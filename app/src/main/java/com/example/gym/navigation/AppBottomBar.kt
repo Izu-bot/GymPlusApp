@@ -17,7 +17,7 @@ fun AppBottomBar(
         Destination.HOME,
         Destination.WORKOUT,
         Destination.PHOTOS,
-        Destination.MEDICAO
+        Destination.MEDICAO,
     ) // ROTAS
 
     NavigationBar {
