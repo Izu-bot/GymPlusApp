@@ -38,7 +38,7 @@ fun AppNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Destination.HOME.route,
+        startDestination = Destination.LOADING.route,
         modifier = modifier
     ) {
         composable(Destination.LOADING.route) {
@@ -126,8 +126,10 @@ fun AppNavHost(
             route = "independent", startDestination = Destination.HOME.route
         ) {
             composable(Destination.CREATE_WORKUT.route) {
+                val viewModel: WorkoutScreenViewModel = viewModel()
                 CreateWorkoutScreen(
                     modifier = Modifier.fillMaxSize(),
+                    workoutScreenViewModel = viewModel,
                     navController = navController
                 )
             }

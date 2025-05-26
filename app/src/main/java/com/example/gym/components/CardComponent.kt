@@ -32,20 +32,21 @@ fun CardComponent(
     cornerRadius: Dp,
     colors: CardColors,
     cardElevation: CardElevation,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Card(
         shape = RoundedCornerShape(cornerRadius),
         colors = colors,
         elevation = cardElevation,
-        modifier = Modifier.size(width = 160.dp, height = 84.dp),
+        modifier = modifier.size(width = 160.dp, height = 84.dp),
         onClick = onClick
     ) {
         Column(
-            modifier = Modifier.padding(10.dp)
+            modifier = modifier.padding(10.dp)
         ) {
             Icon(painter = painterResource(id = icon), contentDescription = title)
-            Spacer(Modifier.height(2.dp))
+            Spacer(modifier.height(2.dp))
             Text(
                 text = title,
                 style = style,

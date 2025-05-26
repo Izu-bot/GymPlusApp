@@ -1,39 +1,78 @@
 package com.example.gym.screens.workout
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import com.example.gym.components.LabeledTextField
+import com.example.gym.components.MyButton
+import kotlinx.coroutines.launch
 
 @Composable
 fun CreateWorkoutScreen(
     modifier: Modifier = Modifier,
+    workoutScreenViewModel: WorkoutScreenViewModel,
     navController: NavController
 ) {
+    val focusManager = LocalFocusManager.current
+    val nomePlanilha by workoutScreenViewModel.namePlanilha.observeAsState("")
+
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    LaunchedEffect(key1 = lifecycleOwner.lifecycle, key2 = snackbarHostState) {
+        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            workoutScreenViewModel.navigationAndStatusEvent.collect { navigationEvent ->
+                when(navigationEvent) {
+                    is NavigationEvent.ShowStatusMessage -> {
+                        val message = navigationEvent.message
+
+                        scope.launch {
+                            snackbarHostState.showSnackbar(
+                                message = message,
+                                duration = SnackbarDuration.Short
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     val groupsMuscle = listOf(
         "Peito",
@@ -45,51 +84,82 @@ fun CreateWorkoutScreen(
         "Ombro"
     )
 
-    Column(modifier) {
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(Icons.AutoMirrored.Filled.KeyboardArrowLeft, contentDescription = "Votlar a Home")
-            Text(text = "Criar planilha de treino", style = MaterialTheme.typography.titleMedium)
-        }
-        Spacer(Modifier.height(16.dp))
-        LabeledTextField(
-            label = "Nome da Planilha",
-            value = "",
-            onValueChange = {},
-            placeholder = "ex, Treino de Segunda-feira",
-        )
+    Scaffold(snackbarHost = { SnackbarHost(hostState = snackbarHostState) }) { paddingValues ->
+        Column(modifier.padding(paddingValues)) {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    Icons.AutoMirrored.Filled.KeyboardArrowLeft,
+                    contentDescription = "Votlar a Home"
+                )
+                Text(
+                    text = "Criar planilha de treino",
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
+            Spacer(Modifier.height(16.dp))
+            LabeledTextField(
+                label = "Nome da Planilha",
+                value = nomePlanilha,
+                onValueChange = { workoutScreenViewModel.onChangeNamePlanilha(it) },
+                placeholder = "ex, Treino de Peito",
+                maxLines = 1,
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions {
+                    focusManager.clearFocus()
+                }
+
+            )
 
 //        Seção para criar planilha
-        Text(
-            text = "Grupo Muscular",
-            modifier = Modifier.padding(5.dp)
-        )
-        LazyRow {
-            items(groupsMuscle) {
-                Card(
-                    modifier = Modifier
-                        .size(width = 100.dp, height = 60.dp)
-                        .padding(5.dp),
-                    elevation = CardDefaults.cardElevation(4.dp),
-                ) { Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(text = it, textAlign = TextAlign.Center)
-                } }
-            }
-        }
+//        Text(
+//            text = "Grupo Muscular",
+//            modifier = Modifier.padding(16.dp)
+//        )
+//        LazyRow(
+//            Modifier.padding(horizontal = 5.dp)
+//        ) {
+//            items(groupsMuscle) {
+//                Card(
+//                    modifier = Modifier
+//                        .size(width = 100.dp, height = 60.dp)
+//                        .padding(5.dp),
+//                    elevation = CardDefaults.cardElevation(4.dp),
+//                ) { Box(
+//                    modifier = Modifier.fillMaxSize(),
+//                    contentAlignment = Alignment.Center
+//                ) {
+//                    Text(text = it, textAlign = TextAlign.Center)
+//                }
+//                }
+//            }
+//        }
 
-//        Sessão para visualizar os treinos
-        Text(
-            text = "Seus Treinos",
-            modifier = Modifier.padding(5.dp)
-        )
-
-//        Botão para criar exercicio
 //        Botão para criar a planilha
+            MyButton(
+                text = "Criar Planilha",
+                fontSize = 18.sp,
+                onClick = {
+                    focusManager.clearFocus()
+                    workoutScreenViewModel.criarPlanilha()
+                },
+                buttonColors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.onSurface,
+                    contentColor = MaterialTheme.colorScheme.surface
+                ),
+                shape = RoundedCornerShape(16.dp),
+                elevation = ButtonDefaults.buttonElevation(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(15.dp)
+                    .size(55.dp)
+            )
+        }
     }
 }

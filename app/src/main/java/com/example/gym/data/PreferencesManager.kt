@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 // Extensão do Contexto para acessar o DataStore
@@ -37,6 +38,10 @@ object PreferencesManager {
         return dataStore.data.map { preferences ->
             preferences[PreferencesKeys.USER_TOKEN]
         }
+    }
+
+    suspend fun getToken(): String? {
+        return getUserToken().first()
     }
 
 //    Limpar token (suspend)

@@ -2,12 +2,14 @@ package com.example.gym.service
 
 import com.example.gym.service.api.ApiService
 import com.example.gym.service.auth.AuthService
+import com.example.gym.service.planilha.SpreadsheetService
 import com.example.gym.service.user.UserService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 
 class RetrofitFactory {
-    private val _url = "https://9799-2804-dec-236-d500-ae50-3fbb-3370-7ff9.ngrok-free.app/"
+    private val _url = "https://e894-2804-dec-236-d500-2adf-127b-ba12-32c7.ngrok-free.app/"
 
     private val retrofitFactory = Retrofit
         .Builder()
@@ -19,8 +21,13 @@ class RetrofitFactory {
         return retrofitFactory.create(AuthService::class.java)
     }
 
+//    TODO: Mudar o nome da função para "usuario"
     fun cadastroUsuario() : UserService {
         return retrofitFactory.create(UserService::class.java)
+    }
+
+    fun spreadsheet() : SpreadsheetService {
+        return retrofitFactory.create(SpreadsheetService::class.java)
     }
 
     fun apiCheck() : ApiService {
