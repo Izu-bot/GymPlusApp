@@ -107,7 +107,7 @@ fun CadastroScreen(
             HeaderViewBackButton(
                 title = "Criar uma conta",
                 onBackClick = {
-                    navController.navigate("login")
+                    navController.navigate(Destination.LOGIN.route)
                 }
             )
 

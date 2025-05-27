@@ -28,6 +28,10 @@ class WorkoutScreenViewModel: ViewModel() {
         _namePlanilha.value = novaPlanilha
     }
 
+    fun limparNomePlanilha() {
+        _namePlanilha.value = ""
+    }
+
     private val spreadsheet: SpreadsheetService by lazy {
         RetrofitFactory().spreadsheet()
     }

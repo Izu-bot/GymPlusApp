@@ -9,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.create
 
 class RetrofitFactory {
-    private val _url = "https://e894-2804-dec-236-d500-2adf-127b-ba12-32c7.ngrok-free.app/"
+    private val _url = "https://73db-2804-dec-236-d500-108-173f-8b5b-e184.ngrok-free.app/"
 
     private val retrofitFactory = Retrofit
         .Builder()

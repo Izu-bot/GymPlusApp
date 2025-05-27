@@ -3,6 +3,7 @@ package com.example.gym.components
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -37,7 +38,8 @@ fun HeaderViewBackButton(
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.chevron_left_150dp),
-                contentDescription = "Back"
+                contentDescription = "Back",
+                modifier = Modifier.size(26.dp)
             )
         }
     }

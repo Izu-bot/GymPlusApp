@@ -204,7 +204,7 @@ fun LoginScreen(
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.clickable {
-                        navController.navigate("cadastro")
+                        navController.navigate(Destination.CADASTRO.route)
                     })
             }
         }

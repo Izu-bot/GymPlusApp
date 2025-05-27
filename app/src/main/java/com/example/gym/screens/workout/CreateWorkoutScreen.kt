@@ -1,5 +1,7 @@
 package com.example.gym.screens.workout
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
@@ -38,8 +41,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
+import com.example.gym.components.HeaderViewBackButton
 import com.example.gym.components.LabeledTextField
 import com.example.gym.components.MyButton
+import com.example.gym.navigation.Destination
 import kotlinx.coroutines.launch
 
 @Composable
@@ -74,32 +79,24 @@ fun CreateWorkoutScreen(
         }
     }
 
-    val groupsMuscle = listOf(
-        "Peito",
-        "Perna",
-        "Costas",
-        "Braço",
-        "Quadriceps",
-        "Posteriores",
-        "Ombro"
-    )
+//    TODO: Adicionar um label para grupo muscular
 
     Scaffold(snackbarHost = { SnackbarHost(hostState = snackbarHostState) }) { paddingValues ->
-        Column(modifier.padding(paddingValues)) {
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(16.dp),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    Icons.AutoMirrored.Filled.KeyboardArrowLeft,
-                    contentDescription = "Votlar a Home"
-                )
-                Text(
-                    text = "Criar planilha de treino",
-                    style = MaterialTheme.typography.titleMedium
-                )
-            }
+        Column(modifier
+            .padding(paddingValues)
+            .clickable(
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }
+                ) {
+                    focusManager.clearFocus()
+                },) {
+            HeaderViewBackButton(
+                title = "Criar planilha de treinos",
+                onBackClick = {
+                    navController.navigate(Destination.HOME.route)
+                }
+            )
+
             Spacer(Modifier.height(16.dp))
             LabeledTextField(
                 label = "Nome da Planilha",
@@ -117,30 +114,6 @@ fun CreateWorkoutScreen(
 
             )
 
-//        Seção para criar planilha
-//        Text(
-//            text = "Grupo Muscular",
-//            modifier = Modifier.padding(16.dp)
-//        )
-//        LazyRow(
-//            Modifier.padding(horizontal = 5.dp)
-//        ) {
-//            items(groupsMuscle) {
-//                Card(
-//                    modifier = Modifier
-//                        .size(width = 100.dp, height = 60.dp)
-//                        .padding(5.dp),
-//                    elevation = CardDefaults.cardElevation(4.dp),
-//                ) { Box(
-//                    modifier = Modifier.fillMaxSize(),
-//                    contentAlignment = Alignment.Center
-//                ) {
-//                    Text(text = it, textAlign = TextAlign.Center)
-//                }
-//                }
-//            }
-//        }
-
 //        Botão para criar a planilha
             MyButton(
                 text = "Criar Planilha",
@@ -148,6 +121,7 @@ fun CreateWorkoutScreen(
                 onClick = {
                     focusManager.clearFocus()
                     workoutScreenViewModel.criarPlanilha()
+                    workoutScreenViewModel.limparNomePlanilha()
                 },
                 buttonColors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.onSurface,
@@ -160,6 +134,16 @@ fun CreateWorkoutScreen(
                     .padding(15.dp)
                     .size(55.dp)
             )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "Sua planilha de treino pode ser visualizada na tela \"Treinos\".",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
         }
     }
 }
