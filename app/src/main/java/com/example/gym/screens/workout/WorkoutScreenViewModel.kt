@@ -1,7 +1,6 @@
 package com.example.gym.screens.workout
 
 import android.util.Log
-import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,9 +16,9 @@ import retrofit2.HttpException
 
 class WorkoutScreenViewModel: ViewModel() {
 
+
     private val _navigationAndStatusEvent = MutableSharedFlow<NavigationEvent>()
     val navigationAndStatusEvent: SharedFlow<NavigationEvent> = _navigationAndStatusEvent
-
 
     private val _namePlanilha = MutableLiveData("")
     val namePlanilha: LiveData<String> = _namePlanilha
@@ -69,6 +68,8 @@ class WorkoutScreenViewModel: ViewModel() {
 
         }
     }
+
+
 }
 
 sealed class NavigationEvent {

@@ -22,7 +22,9 @@ fun AppBottomBar(
 
     NavigationBar {
         visibleDestination.forEach { destination ->
+            val isEnabled = destination != Destination.PHOTOS && destination != Destination.MEDICAO
             NavigationBarItem(
+                enabled = isEnabled,
                 selected = currentRoute == destination.route,
                 onClick = { onItemClick(destination) },
                 icon = { Icon(painter = painterResource(id = destination.icon), contentDescription = destination.label) },

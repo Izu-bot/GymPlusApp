@@ -93,6 +93,7 @@ fun HomeScreen(modifier: Modifier = Modifier, homeScreenViewModel: HomeScreenVie
                     }
                 )
                 CardComponent(
+                    enabled = false,
                     icon = R.drawable.trading,
                     title = "Progresso",
                     style = MaterialTheme.typography.titleSmall,

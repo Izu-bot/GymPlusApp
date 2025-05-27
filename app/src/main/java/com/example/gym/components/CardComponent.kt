@@ -1,11 +1,7 @@
 package com.example.gym.components
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -33,14 +29,16 @@ fun CardComponent(
     colors: CardColors,
     cardElevation: CardElevation,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true
 ) {
     Card(
         shape = RoundedCornerShape(cornerRadius),
         colors = colors,
         elevation = cardElevation,
         modifier = modifier.size(width = 160.dp, height = 84.dp),
-        onClick = onClick
+        onClick = onClick,
+        enabled = enabled
     ) {
         Column(
             modifier = modifier.padding(10.dp)
