@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gym.data.PreferencesManager
 import com.example.gym.model.planilha.CreateSpreadsheetRequest
+import com.example.gym.model.planilha.SpreadsheetResponse
 import com.example.gym.service.RetrofitFactory
 import com.example.gym.service.planilha.SpreadsheetService
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -22,6 +23,9 @@ class WorkoutScreenViewModel: ViewModel() {
 
     private val _namePlanilha = MutableLiveData("")
     val namePlanilha: LiveData<String> = _namePlanilha
+
+    private val _spreadsheetList = MutableLiveData<List<SpreadsheetResponse>>()
+    val spreadsheetList: LiveData<List<SpreadsheetResponse>> = _spreadsheetList
 
     fun onChangeNamePlanilha(novaPlanilha: String) {
         _namePlanilha.value = novaPlanilha
@@ -66,6 +70,32 @@ class WorkoutScreenViewModel: ViewModel() {
                 _navigationAndStatusEvent.emit(NavigationEvent.ShowStatusMessage(e.toString()))
             }
 
+        }
+    }
+
+    fun viewSpreadsheet() {
+        viewModelScope.launch {
+            try {
+                val token = PreferencesManager.getToken() ?: run {
+                    _navigationAndStatusEvent.emit(NavigationEvent.ShowStatusMessage("Token invalido"))
+                    return@launch
+                }
+
+                val response = spreadsheet.view("Bearer $token")
+
+                if (response.isSuccessful) {
+                    response.body()?.let { list ->
+                        _spreadsheetList.value = list
+                    } ?: run {
+                        _navigationAndStatusEvent.emit(NavigationEvent.ShowStatusMessage("Dados vazios"))
+                    }
+                } else {
+                    _navigationAndStatusEvent.emit(NavigationEvent.ShowStatusMessage("Erro: ${response.code()}"))
+                }
+            } catch (e: Exception)
+            {
+                _navigationAndStatusEvent.emit(NavigationEvent.ShowStatusMessage("Exceção: ${e.message}"))
+            }
         }
     }
 

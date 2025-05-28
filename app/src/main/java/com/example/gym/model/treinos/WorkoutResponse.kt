@@ -1,6 +1,6 @@
 package com.example.gym.model.treinos
 
-data class WokoutResponse(
+data class WorkoutResponse(
     val id: Int,
     val name: String,
     val reps: Int,
