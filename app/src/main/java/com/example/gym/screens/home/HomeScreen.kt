@@ -8,14 +8,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -87,7 +85,7 @@ fun HomeScreen(modifier: Modifier = Modifier, homeScreenViewModel: HomeScreenVie
                         defaultElevation = 6.dp
                     ),
                     onClick = {
-                        navController.navigate(Destination.CREATE_WORKUT.route) {
+                        navController.navigate(Destination.CREATE_SPREADSHEET.route) {
                             launchSingleTop = true
                         }
                     }
@@ -129,7 +127,7 @@ fun HomeScreen(modifier: Modifier = Modifier, homeScreenViewModel: HomeScreenVie
                         defaultElevation = 6.dp
                     ),
                     onClick = {
-
+                        navController.navigate(Destination.CREATE_WORKOUT.route)
                     }
                 )
             }

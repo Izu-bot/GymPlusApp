@@ -23,6 +23,7 @@ import com.example.gym.screens.medicao.MedicaoScreen
 import com.example.gym.screens.medicao.MedicaoScreenViewModel
 import com.example.gym.screens.progresso.PhotosScreen
 import com.example.gym.screens.progresso.PhotosScreenViewModel
+import com.example.gym.screens.workout.CreateSpreadsheetScreen
 import com.example.gym.screens.workout.CreateWorkoutScreen
 import com.example.gym.screens.workout.WorkoutScreen
 import com.example.gym.screens.workout.WorkoutScreenViewModel
@@ -124,11 +125,19 @@ fun AppNavHost(
         navigation(
             route = "independent", startDestination = Destination.HOME.route
         ) {
-            composable(Destination.CREATE_WORKUT.route) {
+            composable(Destination.CREATE_SPREADSHEET.route) {
+                val viewModel: WorkoutScreenViewModel = viewModel()
+                CreateSpreadsheetScreen(
+                    modifier = Modifier.fillMaxSize(),
+                    workoutScreenViewModel = viewModel,
+                    navController = navController
+                )
+            }
+            composable(Destination.CREATE_WORKOUT.route) {
                 val viewModel: WorkoutScreenViewModel = viewModel()
                 CreateWorkoutScreen(
                     modifier = Modifier.fillMaxSize(),
-                    workoutScreenViewModel = viewModel,
+                    createWorkoutScreenViewModel = viewModel,
                     navController = navController
                 )
             }
