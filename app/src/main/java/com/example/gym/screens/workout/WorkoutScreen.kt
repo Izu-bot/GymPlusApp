@@ -1,19 +1,16 @@
 package com.example.gym.screens.workout
 
-import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -22,12 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.gym.R
-import com.example.gym.components.CardComponent
-import com.example.gym.components.CardTraining
 import com.example.gym.components.CardWorkout
-import com.example.gym.components.HeaderViewBackButton
-import com.example.gym.navigation.Destination
 
 @Composable
 fun WorkoutScreen(
@@ -48,13 +40,13 @@ fun WorkoutScreen(
     ) {
         items(spreadsheetList) { planilha ->
             CardWorkout(
-                icon = R.drawable.more_vert,
-                onClickButton = {},
                 title = planilha.name.replaceFirstChar { it.titlecase() },
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
                 textColor = MaterialTheme.colorScheme.surface,
-                cornerRadius = 24.dp,
+                cornerRadius = RoundedCornerShape(
+                    12.dp
+                ),
                 colors = CardDefaults.cardColors(
                     containerColor = MaterialTheme.colorScheme.onSurfaceVariant,
                     contentColor = MaterialTheme.colorScheme.surface
