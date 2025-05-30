@@ -17,14 +17,16 @@ fun MyButton(
     fontSize: TextUnit,
     buttonColors: ButtonColors,
     elevation: ButtonElevation,
-    shape: RoundedCornerShape
+    shape: RoundedCornerShape,
+    isEnabled: Boolean = true
 ) {
     Button(
         onClick = onClick,
         modifier = modifier,
         colors = buttonColors,
         elevation = elevation,
-        shape = shape
+        shape = shape,
+        enabled = isEnabled
     ) {
         Text(
             text = text,

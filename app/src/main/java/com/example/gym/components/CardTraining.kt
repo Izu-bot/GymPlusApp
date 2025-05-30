@@ -30,6 +30,7 @@ fun CardTraining(
     cornerRadius: Dp,
     colors: CardColors,
     cardElevation: CardElevation,
+    isEnabled: Boolean
 ) {
     Card(
         modifier = Modifier
@@ -62,6 +63,7 @@ fun CardTraining(
                 text = titleButton,
                 fontSize = 16.sp,
                 onClick = {},
+                isEnabled = isEnabled,
                 buttonColors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.secondary,
                     contentColor = MaterialTheme.colorScheme.surface
@@ -90,6 +92,7 @@ private fun CardTrainingPreview() {
         ),
         title = "Treino de hoje",
         subTitle = "Complete suas metas diárias",
-        titleButton = "Começar treino"
+        titleButton = "Começar treino",
+        isEnabled = true
     )
 }

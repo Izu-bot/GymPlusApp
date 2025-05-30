@@ -58,7 +58,8 @@ fun HomeScreen(modifier: Modifier = Modifier, homeScreenViewModel: HomeScreenVie
             ),
             title = "Treino de hoje",
             subTitle = "Complete suas metas diárias",
-            titleButton = "Começar treino"
+            titleButton = "Começar treino",
+            isEnabled = false
         )
 
         Column(
