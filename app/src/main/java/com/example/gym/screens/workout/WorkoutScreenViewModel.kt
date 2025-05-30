@@ -180,6 +180,7 @@ class WorkoutScreenViewModel: ViewModel() {
         }
     }
 
+
     fun spreadsheetByid(id: Int) {
         viewModelScope.launch {
             try {
@@ -187,7 +188,6 @@ class WorkoutScreenViewModel: ViewModel() {
                 val response = spreadsheet.getId("Bearer $token", id)
 
                 if (response.isSuccessful && response.body() != null) {
-                    Log.d("RESPONSE", response.body().toString())
                     _spreadsheetDetail.postValue(response.body())
                 }
             } catch (e: Exception) {
@@ -195,7 +195,45 @@ class WorkoutScreenViewModel: ViewModel() {
                 }
             }
         }
+
+    fun removeSpreadsheet(id: Int) {
+        viewModelScope.launch {
+            try {
+                val token = PreferencesManager.getToken() ?: return@launch
+                val response = spreadsheet.remove("Bearer $token", id)
+
+                if (response.isSuccessful) {
+                    _navigationAndStatusEvent.emit(NavigationEvent.ShowStatusMessage("Planilha removida com sucesso."))
+                    viewSpreadsheet()
+                } else {
+                    _navigationAndStatusEvent.emit(NavigationEvent.ShowStatusMessage("Erro ao remover a planilha."))
+                }
+            } catch (e: HttpException) {
+                _navigationAndStatusEvent.emit(NavigationEvent.ShowStatusMessage("Erro: ${e.message()}"))
+            }
+        }
     }
+
+    fun removeWorkout(id: Int, idSpreadsheet: Int) {
+        viewModelScope.launch {
+            try {
+                val token = PreferencesManager.getToken() ?: return@launch
+                val response = workout.remove("Bearer $token", id)
+
+                if (response.isSuccessful) {
+                    _navigationAndStatusEvent.emit(NavigationEvent.ShowStatusMessage("Exercicio removido com sucesso."))
+                    spreadsheetByid(idSpreadsheet)
+                } else {
+                    _navigationAndStatusEvent.emit(NavigationEvent.ShowStatusMessage("Erro ao remover o exercicio."))
+                }
+
+            } catch (e: HttpException) {
+                _navigationAndStatusEvent.emit(NavigationEvent.ShowStatusMessage("Erro: ${e.message()}"))
+            }
+        }
+    }
+
+}
 
 sealed class NavigationEvent {
     data class ShowStatusMessage(val message: String) : NavigationEvent()

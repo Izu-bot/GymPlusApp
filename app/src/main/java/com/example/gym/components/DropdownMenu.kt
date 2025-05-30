@@ -31,6 +31,7 @@ fun DropdownMenu(
     modifier: Modifier = Modifier,
     contentColor: Color,
     containerColor: Color,
+    onClick: () -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
 
@@ -56,7 +57,7 @@ fun DropdownMenu(
                     Icon(Icons.Default.Delete, contentDescription = "Delete")
                 },
                 text = { Text("Remover") },
-                onClick = { /*TODO: Função para remover a planilha*/ }
+                onClick = onClick
             )
             DropdownMenuItem(
                 leadingIcon = {

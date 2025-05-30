@@ -28,7 +28,8 @@ fun CardWorkout(
     cardElevation: CardElevation,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    onClickMenu: () -> Unit
     ) {
     Card(
         shape = cornerRadius,
@@ -50,7 +51,8 @@ fun CardWorkout(
             )
             DropdownMenu(
                 containerColor = Color.Transparent,
-                contentColor = MaterialTheme.colorScheme.surface
+                contentColor = MaterialTheme.colorScheme.surface,
+                onClick = onClickMenu
             )
         }
     }

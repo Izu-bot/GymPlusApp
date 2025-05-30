@@ -16,6 +16,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -29,6 +30,8 @@ fun WorkoutScreen(
     navController: NavController
     ) {
     val spreadsheetList by workoutScreenViewModel.spreadsheetList.observeAsState(emptyList())
+
+    val focusManager = LocalFocusManager.current
 
     LaunchedEffect(Unit) {
         workoutScreenViewModel.viewSpreadsheet()
@@ -57,6 +60,10 @@ fun WorkoutScreen(
                 ),
                 onClick = {
                     navController.navigate(Destination.DETAILS.route.replace("{spreadsheetId}", "${planilha.id}"))
+                },
+                onClickMenu = {
+                    workoutScreenViewModel.removeSpreadsheet(planilha.id)
+                    focusManager.clearFocus()
                 },
                 modifier = Modifier
                     .fillMaxWidth()
