@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -34,6 +35,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -42,6 +44,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
+import com.example.gym.R
 import com.example.gym.components.HeaderViewBackButton
 import com.example.gym.components.LabeledTextField
 import com.example.gym.components.MyButton
@@ -134,7 +137,7 @@ fun CreateWorkoutScreen(
                     onValueChange = { createWorkoutScreenViewModel.onChangeRepsWorkout(it)},
                     placeholder = "12",
                     label = "Repetições",
-                    icon = { Icon(Icons.Default.Star, contentDescription = "Start") },
+                    icon = { Icon(painterResource(id = R.drawable.cycle_46dp_), contentDescription = "Repetições") },
                     colors = TextFieldDefaults.colors(
                         unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
                         focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
@@ -150,7 +153,7 @@ fun CreateWorkoutScreen(
                     onValueChange = { createWorkoutScreenViewModel.onChangeSeriesWorkout(it) },
                     placeholder = "3",
                     label = "Series",
-                    icon = { Icon(Icons.Default.Star, contentDescription = "Start") },
+                    icon = { Icon(painterResource(id = R.drawable.steppers_46dp_), contentDescription = "Series") },
                     colors = TextFieldDefaults.colors(
                         unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
                         focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
@@ -168,7 +171,10 @@ fun CreateWorkoutScreen(
                 onValueChange = { createWorkoutScreenViewModel.onChangeWeightWorkout(it) },
                 placeholder = "48",
                 label = "Peso (kg)",
-                icon = { Icon(Icons.Default.Star, contentDescription = "Start") },
+                icon = { Icon(
+                    painterResource(id = R.drawable.weight_46dp_),
+                    contentDescription = "Peso",
+                ) },
                 colors = TextFieldDefaults.colors(
                     unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
                     focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,

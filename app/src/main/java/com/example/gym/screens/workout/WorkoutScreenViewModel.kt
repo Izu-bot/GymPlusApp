@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
+import kotlin.math.log
 
 class WorkoutScreenViewModel: ViewModel() {
 
@@ -40,6 +41,9 @@ class WorkoutScreenViewModel: ViewModel() {
 
     private val _weightWorkout = MutableLiveData("")
     val weightWorkout: LiveData<String> = _weightWorkout
+
+    private val _spreadsheetDetail = MutableLiveData<SpreadsheetResponse>()
+    val spreadsheetDetail: LiveData<SpreadsheetResponse> = _spreadsheetDetail
 
     private val _spreadsheetId = MutableLiveData(0)
 
@@ -176,7 +180,22 @@ class WorkoutScreenViewModel: ViewModel() {
         }
     }
 
-}
+    fun spreadsheetByid(id: Int) {
+        viewModelScope.launch {
+            try {
+                val token = PreferencesManager.getToken() ?: return@launch
+                val response = spreadsheet.getId("Bearer $token", id)
+
+                if (response.isSuccessful && response.body() != null) {
+                    Log.d("RESPONSE", response.body().toString())
+                    _spreadsheetDetail.postValue(response.body())
+                }
+            } catch (e: Exception) {
+                _navigationAndStatusEvent.emit(NavigationEvent.ShowStatusMessage("Exceção: ${e.message}"))
+                }
+            }
+        }
+    }
 
 sealed class NavigationEvent {
     data class ShowStatusMessage(val message: String) : NavigationEvent()

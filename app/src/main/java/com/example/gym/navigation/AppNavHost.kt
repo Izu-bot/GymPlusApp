@@ -1,6 +1,8 @@
 package com.example.gym.navigation
 
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -8,10 +10,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.example.gym.data.PreferencesManager
+import com.example.gym.model.planilha.SpreadsheetResponse
 import com.example.gym.screens.cadastro.CadastroScreen
 import com.example.gym.screens.cadastro.CadastroScreenViewModel
 import com.example.gym.screens.home.HomeScreen
@@ -25,11 +30,15 @@ import com.example.gym.screens.progresso.PhotosScreen
 import com.example.gym.screens.progresso.PhotosScreenViewModel
 import com.example.gym.screens.workout.CreateSpreadsheetScreen
 import com.example.gym.screens.workout.CreateWorkoutScreen
+import com.example.gym.screens.workout.DetailSpreadsheetScreen
 import com.example.gym.screens.workout.WorkoutScreen
 import com.example.gym.screens.workout.WorkoutScreenViewModel
 import com.example.gym.service.RetrofitFactory
 import com.example.gym.service.api.ApiService
+import com.google.gson.Gson
 import kotlinx.coroutines.delay
+import java.net.URLDecoder
+import java.nio.charset.StandardCharsets
 
 @Composable
 fun AppNavHost(
@@ -140,6 +149,23 @@ fun AppNavHost(
                     createWorkoutScreenViewModel = viewModel,
                     navController = navController
                 )
+            }
+            composable(Destination.DETAILS.route, arguments = listOf(
+                navArgument("spreadsheetId") {
+                    type = NavType.IntType
+                }
+            )) { backStackEntry ->
+
+                val spreadsheetId = backStackEntry.arguments?.getInt("spreadsheetId") ?: -1
+
+                val viewModel: WorkoutScreenViewModel = viewModel()
+
+                    DetailSpreadsheetScreen(
+                        modifier = Modifier.fillMaxSize(),
+                        detailsSpreadsheetViewModel = viewModel,
+                        navController = navController,
+                        spreadsheet = spreadsheetId
+                    )
             }
         }
     }

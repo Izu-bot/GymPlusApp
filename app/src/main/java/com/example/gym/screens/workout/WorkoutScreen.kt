@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.gym.components.CardWorkout
+import com.example.gym.navigation.Destination
 
 @Composable
 fun WorkoutScreen(
@@ -55,7 +56,7 @@ fun WorkoutScreen(
                     defaultElevation = 16.dp
                 ),
                 onClick = {
-//                    navController.navigate("Detalhes/${planilha.id}")
+                    navController.navigate(Destination.DETAILS.route.replace("{spreadsheetId}", "${planilha.id}"))
                 },
                 modifier = Modifier
                     .fillMaxWidth()

@@ -7,6 +7,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface SpreadsheetService {
     @POST("api/Spreadsheet")
@@ -19,5 +20,11 @@ interface SpreadsheetService {
     suspend fun view(
         @Header("Authorization") token: String,
     ): Response<List<SpreadsheetResponse>>
+
+    @GET("api/Spreadsheet/{id}")
+    suspend fun getId(
+        @Header("Authorization") token: String,
+        @Path("id") id: Int
+    ): Response<SpreadsheetResponse>
 
 }
