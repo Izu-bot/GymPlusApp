@@ -2,7 +2,6 @@ package com.example.gym.service.planilha
 
 import com.example.gym.model.planilha.CreateSpreadsheetRequest
 import com.example.gym.model.planilha.SpreadsheetResponse
-import com.example.gym.model.treinos.WorkoutResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET

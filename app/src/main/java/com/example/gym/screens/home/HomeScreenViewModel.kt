@@ -19,7 +19,7 @@ import java.util.Locale
 class HomeScreenViewModel : ViewModel() {
 
     private val userService: UserService by lazy {
-        RetrofitFactory().cadastroUsuario()
+        RetrofitFactory().user()
     }
 
     private val _nameUser = MutableStateFlow("")

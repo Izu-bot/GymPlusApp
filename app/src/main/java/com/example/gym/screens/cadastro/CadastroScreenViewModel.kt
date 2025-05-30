@@ -1,6 +1,5 @@
 package com.example.gym.screens.cadastro
 
-import android.util.Log
 import android.util.Patterns.EMAIL_ADDRESS
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -33,7 +32,7 @@ class CadastroScreenViewModel : ViewModel() {
     val isLoading: LiveData<Boolean> = _isLoading
 
     private val usuarioService : UserService by lazy {
-        RetrofitFactory().cadastroUsuario()
+        RetrofitFactory().user()
     }
 
     private val _emailErroMessage = MutableLiveData<String?>(null)

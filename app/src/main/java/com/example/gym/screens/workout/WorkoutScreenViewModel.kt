@@ -8,8 +8,10 @@ import androidx.lifecycle.viewModelScope
 import com.example.gym.data.PreferencesManager
 import com.example.gym.model.planilha.CreateSpreadsheetRequest
 import com.example.gym.model.planilha.SpreadsheetResponse
+import com.example.gym.model.treinos.WorkoutRequest
 import com.example.gym.service.RetrofitFactory
 import com.example.gym.service.planilha.SpreadsheetService
+import com.example.gym.service.workout.WorkoutService
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
@@ -27,6 +29,41 @@ class WorkoutScreenViewModel: ViewModel() {
     private val _spreadsheetList = MutableLiveData<List<SpreadsheetResponse>>()
     val spreadsheetList: LiveData<List<SpreadsheetResponse>> = _spreadsheetList
 
+    private val _nameWorkout = MutableLiveData("")
+    val nameWorkout: LiveData<String> = _nameWorkout
+
+    private val _repsWorkout = MutableLiveData("")
+    val repsWorkout: LiveData<String> = _repsWorkout
+
+    private val _seriesWorkout = MutableLiveData("")
+    val seriesWorkout: LiveData<String> = _seriesWorkout
+
+    private val _weightWorkout = MutableLiveData("")
+    val weightWorkout: LiveData<String> = _weightWorkout
+
+    private val _spreadsheetId = MutableLiveData(0)
+
+    fun onChangeNameWorkout(newName: String) {
+        _nameWorkout.value = newName
+    }
+
+    fun onChangeRepsWorkout(newReps: String) {
+        _repsWorkout.value = newReps
+    }
+
+    fun onChangeSeriesWorkout(newSeries: String) {
+        _seriesWorkout.value = newSeries
+    }
+
+    fun onChangeWeightWorkout(newWeight: String) {
+        _weightWorkout.value = newWeight
+    }
+
+    fun onChangeSpreadsheetId(newSpreadsheetId: Int) {
+        _spreadsheetId.value = newSpreadsheetId
+    }
+
+
     fun onChangeNamePlanilha(novaPlanilha: String) {
         _namePlanilha.value = novaPlanilha
     }
@@ -37,6 +74,10 @@ class WorkoutScreenViewModel: ViewModel() {
 
     private val spreadsheet: SpreadsheetService by lazy {
         RetrofitFactory().spreadsheet()
+    }
+
+    private val workout: WorkoutService by lazy {
+        RetrofitFactory().workout()
     }
 
     fun criarPlanilha() {
@@ -57,9 +98,7 @@ class WorkoutScreenViewModel: ViewModel() {
                     return@launch
                 }
 
-                Log.d("TOKEN_DEBUG", "token: $token")
                 val fullToken = "Bearer $token"
-                Log.d("TOKEN_DEBUG", "full token: $fullToken")
                 val spreadsheetRequest = CreateSpreadsheetRequest(name = nome)
                 val response = spreadsheet.create(fullToken, spreadsheetRequest)
 
@@ -99,6 +138,43 @@ class WorkoutScreenViewModel: ViewModel() {
         }
     }
 
+    fun createWorkout() {
+        viewModelScope.launch {
+
+            val name = _nameWorkout.value ?: ""
+            val reps = _repsWorkout.value ?: ""
+            val series = _seriesWorkout.value ?: ""
+            val weight = _weightWorkout.value ?: ""
+            val spreadsheetId = _spreadsheetId.value ?: 0
+
+            try {
+                val token = PreferencesManager.getToken() ?: run {
+                    _navigationAndStatusEvent.emit(NavigationEvent.ShowStatusMessage("Token inválido"))
+                    return@launch
+                }
+
+
+                val workoutRequest = WorkoutRequest(
+                    name = name,
+                    reps = reps.toInt(),
+                    series = series.toInt(),
+                    weight = weight.toInt(),
+                    spreadsheetId = spreadsheetId
+                )
+
+                val fullToken = "Bearer $token"
+                Log.d("TOKEN", fullToken)
+                val response = workout.create(fullToken, workoutRequest)
+
+                if (response.isSuccessful && response.body() != null) {
+                    _navigationAndStatusEvent.emit(NavigationEvent.ShowStatusMessage("Exercicio criado com sucesso."))
+                }
+
+            } catch (e: HttpException) {
+                _navigationAndStatusEvent.emit(NavigationEvent.ShowStatusMessage("Exceção: ${e.message}"))
+            }
+        }
+    }
 
 }
 

@@ -1,9 +1,9 @@
 package com.example.gym.model.treinos
 
-data class Workout(
-    val id: Int,
+data class WorkoutRequest(
     val name: String,
     val reps: Int,
     val series: Int,
-    val weight: Int
+    val weight: Int,
+    val spreadsheetId: Int
 )

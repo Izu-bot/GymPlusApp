@@ -16,12 +16,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import com.example.gym.model.planilha.SpreadsheetResponse
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SelectTextField(
     selectedValue: String,
-    options: List<String>,
+    options: List<SpreadsheetResponse>,
     label: String,
     onValueChangedEvent: (String) -> Unit,
     modifier: Modifier = Modifier
@@ -51,12 +52,12 @@ fun SelectTextField(
         )
 
         ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-            options.forEach { option: String ->
+            options.forEach { option ->
                 DropdownMenuItem(
-                    text = { Text(text = option) },
+                    text = { Text(text = option.name) },
                     onClick = {
                         expanded = false
-                        onValueChangedEvent(option)
+                        onValueChangedEvent(option.name)
                     }
                 )
             }
