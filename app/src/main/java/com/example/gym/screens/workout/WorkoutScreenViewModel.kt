@@ -72,9 +72,6 @@ class WorkoutScreenViewModel: ViewModel() {
         _namePlanilha.value = novaPlanilha
     }
 
-    fun limparNomePlanilha() {
-        _namePlanilha.value = ""
-    }
 
     private val spreadsheet: SpreadsheetService by lazy {
         RetrofitFactory().spreadsheet()
@@ -232,6 +229,14 @@ class WorkoutScreenViewModel: ViewModel() {
             }
         }
     }
+
+    fun clearInputs() {
+        if (_nameWorkout.value!!.isNotEmpty()) _nameWorkout.value = ""
+        if (_repsWorkout.value!!.isNotEmpty()) _repsWorkout.value = ""
+        if (_seriesWorkout.value!!.isNotEmpty()) _seriesWorkout.value = ""
+        if (_weightWorkout.value!!.isNotEmpty()) _weightWorkout.value = ""
+    }
+
 
 }
 

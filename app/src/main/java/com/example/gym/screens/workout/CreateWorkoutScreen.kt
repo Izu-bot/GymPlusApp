@@ -213,6 +213,8 @@ fun CreateWorkoutScreen(
             onClick = {
                 focusManager.clearFocus()
                 createWorkoutScreenViewModel.createWorkout()
+                createWorkoutScreenViewModel.clearInputs()
+
             },
             fontSize = 18.sp,
             buttonColors = ButtonDefaults.buttonColors(

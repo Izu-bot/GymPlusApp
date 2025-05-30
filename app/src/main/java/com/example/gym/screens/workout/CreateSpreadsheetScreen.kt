@@ -116,7 +116,6 @@ fun CreateSpreadsheetScreen(
                 onClick = {
                     focusManager.clearFocus()
                     workoutScreenViewModel.criarPlanilha()
-                    workoutScreenViewModel.limparNomePlanilha()
                 },
                 buttonColors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.onSurface,
