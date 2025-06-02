@@ -81,11 +81,17 @@ class HomeScreenViewModel : ViewModel() {
 
     fun getDay() {
         val atual = LocalDate.now()
-        val locale = Locale.getDefault()
+        val locale = Locale("pt", "BR") // Define explicitamente o idioma
 
         val diaMes = atual.dayOfMonth
-        val mes = atual.month.getDisplayName(TextStyle.FULL, locale).lowercase().replaceFirstChar { it.uppercase() }
-        val diaSemana = atual.dayOfWeek.getDisplayName(TextStyle.FULL, locale).lowercase().replaceFirstChar { it.uppercase() }
+        val mes = atual.month.getDisplayName(TextStyle.FULL, locale)
+            .lowercase(locale)
+            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(locale) else it.toString() }
+
+        val diaSemana = atual.dayOfWeek.getDisplayName(TextStyle.FULL, locale)
+            .lowercase(locale)
+            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(locale) else it.toString() }
+
         val resultado = "$diaSemana, $diaMes de $mes"
 
         _getDay.value = resultado

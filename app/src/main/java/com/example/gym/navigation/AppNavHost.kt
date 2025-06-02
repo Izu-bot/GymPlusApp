@@ -55,20 +55,20 @@ fun AppNavHost(
             val tokenFlow = PreferencesManager.getUserToken()
             val tokenState = tokenFlow.collectAsState(initial = null)
 
-            val apiCheck: ApiService = remember {
-                RetrofitFactory().apiCheck()
-            }
+//            val apiCheck: ApiService = remember {
+//                RetrofitFactory().apiCheck()
+//            }
 
             LaunchedEffect(tokenState.value) {
                 delay(1000)
 
-                val isApiOk = try {
-                    apiCheck.ping().isSuccessful
-                } catch (e: Exception) {
-                    false
-                }
+//                val isApiOk = try {
+//                    apiCheck.ping().isSuccessful
+//                } catch (e: Exception) {
+//                    false
+//                }
 
-                val target = if (isApiOk && tokenState.value != null) {
+                val target = if (tokenState.value != null) {
                     Destination.HOME.route
                 } else {
                     Destination.LOGIN.route
