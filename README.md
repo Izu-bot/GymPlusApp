@@ -11,7 +11,7 @@ Nosso objetivo é te ajudar a manter o foco na academia, eliminando a necessidad
 - Interface Simples: Design intuitivo para uma experiência de usuário sem distrações.
 
 ## Como Usar
-- Baixe e Instale o Gym+: [Download](https://github.com/Izu-bot/GymPlusApp/releases/download/release/app-release.apk).
+- Baixe e Instale o Gym+: [Versões](https://github.com/Izu-bot/GymPlusApp/releases/tag/release).
 - Crie suas Planilhas: Acesse a seção de `Criar treino` para organizar suas rotinas.
 - Comece a Anotar: Ao iniciar o app, você poderá adicionar seu treino do dia em `Adicionar exercicio`.
 
