@@ -15,17 +15,6 @@ Nosso objetivo é te ajudar a manter o foco na academia, eliminando a necessidad
 - Crie suas Planilhas: Acesse a seção de `Criar treino` para organizar suas rotinas.
 - Comece a Anotar: Ao iniciar o app, você poderá adicionar seu treino do dia em `Adicionar exercicio`.
 
-## Próximos Passos (Desenvolvimento Futuro)
-Como um MVP, o Gym+ continuará evoluindo. Algumas das funcionalidades que planejamos para futuras versões incluem:
-
-- Gráficos e estatísticas de progresso.
-- Biblioteca de exercícios com descrições e GIFs/vídeos.
-- Contador de descanso entre séries.
-- Opções de compartilhamento de treino.
-- Recursos de backup e sincronização de dados.
-- Histórico para que seja possivel ver sua evolução.
-- Acomapanhamento para ver seus treinos em tempo real.
-
 ## Contribuição
 O Gym+ está em desenvolvimento ativo. Se você tiver ideias, sugestões ou quiser contribuir, sinta-se à vontade para entrar em contato!
 
