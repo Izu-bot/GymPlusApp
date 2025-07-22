@@ -13,7 +13,7 @@ android {
         minSdk = 26
         targetSdk = 35
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -41,18 +41,21 @@ android {
 
 dependencies {
 
-//    LiveData
+    //    LiveData
     implementation(libs.androidx.runtime.livedata)
 
-//    Navigation
+    //    Navigation
     implementation(libs.androidx.navigation.compose)
 
-//    Retrofit
+    //    Retrofit
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
 
-// DataStore
-    implementation("androidx.datastore:datastore-preferences:1.1.6")
+    // DataStore
+    implementation(libs.androidx.datastore.preferences.v116)
+
+    // Google font
+    implementation(libs.androidx.ui.text.google.fonts)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

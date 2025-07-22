@@ -173,6 +173,8 @@ class WorkoutScreenViewModel: ViewModel() {
 
             } catch (e: HttpException) {
                 _navigationAndStatusEvent.emit(NavigationEvent.ShowStatusMessage("Exceção: ${e.message}"))
+            } catch (e: Exception) {
+                _navigationAndStatusEvent.emit(NavigationEvent.ShowStatusMessage("Exceção: ${e.message}"))
             }
         }
     }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Gym+</string>
+    <string name="versão">Version</string>
+    <string name="bem_vindo">Welcome</string>
+    <string name="preparando_ambiente">Preparing your environment</string>
+</resources>
